@@ -1,7 +1,6 @@
 require "test_helper"
 
 class RFauxFactoryTest < Minitest::Test
-
   GENERATORS = %i[
     gen_html
     gen_alpha
@@ -111,5 +110,4 @@ class RFauxFactoryTest < Minitest::Test
       assert_equal RFauxFactory.gen_string(str_type, 5).length, 5
     end
   end
-
 end

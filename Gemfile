@@ -1,10 +1,11 @@
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in rfauxfactory.gemspec
 gemspec
 
 group :development, :test do
-  gem "test-unit"
-  gem "rake"
   gem "minitest"
+  gem "pry"
+  gem "rake"
+  gem "rubocop-checkstyle_formatter"
+  gem "test-unit"
 end
