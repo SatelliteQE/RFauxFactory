@@ -3,7 +3,7 @@ module RFauxFactory
   MIN_INT = -MAX_INT - 1
   ASCII_LOWERCASE = 'abcdefghijklmnopqrstuvwxyz'.freeze
   ASCII_UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.freeze
-  PUNCTUATION = '!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~'.freeze
+  PUNCTUATION = %q(!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~).freeze
   ASCII_LETTERS = ASCII_LOWERCASE + ASCII_UPPERCASE
   DIGITS = '0123456789'.freeze
   ALPHANUMERIC = ASCII_LETTERS + DIGITS
