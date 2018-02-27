@@ -101,6 +101,5 @@ module RFauxFactory
       raise ArgumentError, "str_type: #{str_type} not supported" unless func_str_types.key?(str_type)
       send(func_str_types[str_type], length)
     end
-
   end
 end
