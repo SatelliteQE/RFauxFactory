@@ -1,7 +1,5 @@
 module RFauxFactory
-  N_BYTES = [42].pack('i').size
-  N_BITS = N_BYTES * 16
-  MAX_INT = 2**(N_BITS - 2) - 1
+  MAX_INT = 2**(1.size * 8 - 2) - 1
   MIN_INT = -MAX_INT - 1
   ASCII_LOWERCASE = 'abcdefghijklmnopqrstuvwxyz'.freeze
   ASCII_UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.freeze

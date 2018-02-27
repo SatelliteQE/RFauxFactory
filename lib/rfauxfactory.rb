@@ -76,10 +76,6 @@ module RFauxFactory
       "<#{html_tag}>#{gen_alpha(length)}</#{html_tag}>"
     end
 
-    def gen_boolean
-      [true, false].sample
-    end
-
     def gen_special(length = 10)
       positive_int! length
       gen_string_from_letters length, PUNCTUATION
@@ -100,6 +96,11 @@ module RFauxFactory
       }
       raise ArgumentError, "str_type: #{str_type} not supported" unless func_str_types.key?(str_type)
       send(func_str_types[str_type], length)
+    end
+
+    # Return a random Boolean value.
+    def gen_boolean
+      [true, false].sample
     end
   end
 end

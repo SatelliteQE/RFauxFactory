@@ -110,4 +110,11 @@ class RFauxFactoryTest < Minitest::Test
       assert_equal RFauxFactory.gen_string(str_type, 5).length, 5
     end
   end
+
+  # Create a random boolean value.
+  def test_gen_boolean
+    10.times do
+      assert [true, false].include? RFauxFactory.gen_boolean
+    end
+  end
 end
