@@ -3,6 +3,18 @@ require "rfauxfactory/constants"
 
 # The python FauxFactory port
 module RFauxFactory
+  STRING_TYPES = {
+    'alpha': :gen_alpha,
+    'alphanumeric': :gen_alphanumeric,
+    'cjk': :gen_cjk,
+    'cyrillic': :gen_cyrillic,
+    'html': :gen_html,
+    'latin1': :gen_latin1,
+    'numeric': :gen_numeric_string,
+    'utf8': :gen_utf8,
+    'punctuation': :gen_special
+  }.freeze
+
   class << self
     private
 
@@ -83,19 +95,20 @@ module RFauxFactory
 
     # A simple wrapper that calls other string generation methods.
     def gen_string(str_type, length = 10)
-      func_str_types = {
-        'alpha': :gen_alpha,
-        'alphanumeric': :gen_alphanumeric,
-        'cjk': :gen_cjk,
-        'cyrillic': :gen_cyrillic,
-        'html': :gen_html,
-        'latin1': :gen_latin1,
-        'numeric': :gen_numeric_string,
-        'utf8': :gen_utf8,
-        'punctuation': :gen_special
-      }
-      raise ArgumentError, "str_type: #{str_type} not supported" unless func_str_types.key?(str_type)
-      send(func_str_types[str_type], length)
+      raise ArgumentError, "str_type: #{str_type} not supported" unless RFauxFactory::STRING_TYPES.key?(str_type)
+      send(RFauxFactory::STRING_TYPES[str_type], length)
+    end
+
+    # Generates a list of different input strings.
+    def gen_strings(length = nil, exclude: [], min_length: 3, max_length: 30)
+      raise ArgumentError, "exclude must be an Array" unless exclude.is_a?(Array)
+      positive_int! min_length
+      positive_int! max_length
+      raise ArgumentError, "max_length must be greater than min_length" unless max_length > min_length
+      RFauxFactory::STRING_TYPES.keys.reject { |str_type| exclude.include?(str_type) }.map do |str_type|
+        str_length = length.nil? ? rand((min_length..max_length)) : length
+        [str_type, gen_string(str_type, str_length)]
+      end.to_h
     end
 
     # Return a random Boolean value.

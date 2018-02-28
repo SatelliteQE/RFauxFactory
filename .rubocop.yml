@@ -16,6 +16,9 @@ LineLength:
 MethodLength:
   Max: 20
 
+ClassLength:
+  Max: 200
+
 ModuleLength:
   Enabled: false
 
