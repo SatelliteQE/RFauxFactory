@@ -1,3 +1,4 @@
+require 'set'
 require "test_helper"
 
 class RFauxFactoryTest < Minitest::Test
@@ -24,7 +25,8 @@ class RFauxFactoryTest < Minitest::Test
     utf8
     punctuation
   ].freeze
-
+  HTML_TAG_MAX_LENGTH = 2 * RFauxFactory::HTML_TAGS.map(&:length).max + 5 # '<></>'.length == 5
+  HTML_TAG_MIN_LENGTH = 2 * RFauxFactory::HTML_TAGS.map(&:length).min + 5 # '<></>'.length == 5
   def test_has_a_version_number
     refute_nil ::RFauxFactory::VERSION
   end
@@ -108,6 +110,81 @@ class RFauxFactoryTest < Minitest::Test
   def test_gen_string_fixed_length
     STRING_TYPES[1..-1].each do |str_type|
       assert_equal RFauxFactory.gen_string(str_type, 5).length, 5
+    end
+  end
+
+  # use 'gen_strings' to generate a hash of supported strings types
+  def test_gen_strings
+    gs = RFauxFactory.gen_strings
+    assert_equal STRING_TYPES.to_set, gs.keys.to_set
+    gs.each_value do |value|
+      assert value.length >= 3
+    end
+  end
+
+  # use 'gen_strings' to generate a fixed length strings.
+  def test_gen_strings_fixed_length
+    RFauxFactory.gen_strings(40).each do |str_type, value|
+      if str_type == :html
+        # html is an exception as tags added
+        assert value.length > 40
+      else
+        assert_equal value.length, 40
+      end
+    end
+  end
+
+  # use 'gen_strings' to generate supported strings with exclude some string types.
+  def test_gen_strings_exclude
+    exclude_types = %i[html cjk]
+    gs = RFauxFactory.gen_strings(exclude: exclude_types)
+    assert_equal gs.keys.to_set.intersection(exclude_types.to_set), Set.new
+    gs.each_value do |value|
+      assert value.length >= 3 && value.length <= 30
+    end
+  end
+
+  # use 'gen_strings' to generate supported strings with min max length.
+  def test_gen_strings_with_min_max_length
+    min_length = 10
+    max_length = 100
+    RFauxFactory.gen_strings(min_length: min_length, max_length: max_length).each do |str_type, value|
+      min_length = 10
+      max_length = 100
+      if str_type == :html
+        # html is an exception as tags added
+        min_length += HTML_TAG_MIN_LENGTH
+        max_length += HTML_TAG_MAX_LENGTH
+      end
+      assert value.length >= min_length && value.length <= max_length
+    end
+  end
+
+  def test_gen_strings_bad_min_length
+    ['', ' ', 'a'].each do |min_length|
+      assert_raises TypeError do
+        RFauxFactory.gen_strings(min_length: min_length)
+      end
+    end
+  end
+
+  def test_gen_strings_bad_max_length
+    ['', ' ', 'a', nil].each do |max_length|
+      assert_raises TypeError do
+        RFauxFactory.gen_strings(max_length: max_length)
+      end
+    end
+  end
+
+  def test_gen_strings_min_length_greater_than_max
+    assert_raises ArgumentError do
+      RFauxFactory.gen_strings(min_length: 30, max_length: 10)
+    end
+  end
+
+  def test_gen_strings_bad_exclude_type
+    assert_raises ArgumentError do
+      RFauxFactory.gen_strings(exclude: 'string as exclude')
     end
   end
 
