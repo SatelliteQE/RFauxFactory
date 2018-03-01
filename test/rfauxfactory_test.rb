@@ -1,5 +1,5 @@
-require 'set'
 require "test_helper"
+require "set"
 
 class RFauxFactoryTest < Minitest::Test
   GENERATORS = %i[
@@ -29,6 +29,25 @@ class RFauxFactoryTest < Minitest::Test
   HTML_TAG_MIN_LENGTH = 2 * RFauxFactory::HTML_TAGS.map(&:length).min + 5 # '<></>'.length == 5
   def test_has_a_version_number
     refute_nil ::RFauxFactory::VERSION
+  end
+
+  def assert_letters_ranges(ranges = [])
+    assert !ranges.empty?
+    last_max_range = 0
+    ranges.each do |codepoint_range|
+      codepoint_range.is_a?(Range)
+      assert codepoint_range.max >= codepoint_range.min
+      assert codepoint_range.min > last_max_range
+      last_max_range = codepoint_range.max
+    end
+  end
+
+  def test_latin1_letters_ranges
+    assert_letters_ranges RFauxFactory::LATIN_LETTERS_RANGES
+  end
+
+  def test_unicode_letters_ranges
+    assert_letters_ranges RFauxFactory::UNICODE_LETTERS_RANGES
   end
 
   # Default string generated is longer than zero characters.
