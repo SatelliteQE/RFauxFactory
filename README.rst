@@ -4,6 +4,9 @@ RFauxFactory
 .. image:: https://badge.fury.io/rb/rfauxfactory.svg
     :target: https://badge.fury.io/rb/rfauxfactory
 
+.. image:: https://coveralls.io/repos/github/SatelliteQE/RFauxFactory/badge.svg?branch=master
+    :target: https://coveralls.io/github/SatelliteQE/RFauxFactory?branch=master
+
 Generates random data for your tests. Ruby port for https://github.com/omaciel/fauxfactory.
 
 Install RFauxFactory
