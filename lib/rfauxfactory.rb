@@ -4,15 +4,15 @@ require "rfauxfactory/constants"
 # The python FauxFactory port
 module RFauxFactory
   STRING_TYPES = {
-    'alpha': :gen_alpha,
-    'alphanumeric': :gen_alphanumeric,
-    'cjk': :gen_cjk,
-    'cyrillic': :gen_cyrillic,
-    'html': :gen_html,
-    'latin1': :gen_latin1,
-    'numeric': :gen_numeric_string,
-    'utf8': :gen_utf8,
-    'punctuation': :gen_special
+    alpha: :gen_alpha,
+    alphanumeric: :gen_alphanumeric,
+    cjk: :gen_cjk,
+    cyrillic: :gen_cyrillic,
+    html: :gen_html,
+    latin1: :gen_latin1,
+    numeric: :gen_numeric_string,
+    utf8: :gen_utf8,
+    punctuation: :gen_special
   }.freeze
 
   class << self
