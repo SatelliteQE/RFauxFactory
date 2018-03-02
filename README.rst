@@ -74,6 +74,81 @@ allowed string types are:
 
     RFauxFactory.gen_string :alpha, 20 => "TuxtvmNwrfbuGaaQSEnM"
 
+Generate Strings of all the supported types
++++++++++++++++++++++++++++++++++++++++++++
+
+- With default fixed length 10:
+
+.. code-block:: ruby
+
+    RFauxFactory.gen_strings
+    => {:alpha=>"RoRHnHUkPO",
+        :alphanumeric=>"nr6SVx2up1",
+        :cjk=>"勷笃儽痖跂飣煾籄綔庋",
+        :cyrillic=>"ҕФҒқьѾљһІЏ",
+        :html=>"<big>YhtxODnoFs</big>",
+        :latin1=>"ÝäÈØÓÌãÝÙÌ",
+        :numeric=>"6684366145",
+        :utf8=>"㓆녵냔𫣾𝝙𦚾쬠𗧛䰢쭱",
+        :punctuation=>"{<;%-:\\<_]"}
+
+
+- With custom fixed length:
+
+.. code-block:: ruby
+
+    RFauxFactory.gen_strings 20
+    => {:alpha=>"tXuyblxhHVvxSStxHRqe",
+        :alphanumeric=>"EbBUUPl7xZP7OC1uZi5B",
+        :cjk=>"圠黄炵鍁寥礟瓢丽粐遵暋歞乽匨霜謟姈迴楩螯",
+        :cyrillic=>"ѻҢӍҩӷѣӼ҈ңФфѡӮЖѽҧѴџӋҎ",
+        :html=>"<span>YMDuJumImvDvxKocHUwE</span>",
+        :latin1=>"ïõêáÃÁÄÃõäêúÈÀÛÃúýïå",
+        :numeric=>"66662825266228221074",
+        :utf8=>"𠲹橝𨖟𐌿𬩱𡁲𤅽㺷𪯠𨨮𢡙𪵾獄𦩸𑈂𤉪𗔋妶ꯡಖ",
+        :punctuation=>"\\,&{($|>`@_^!_{&$=]>"}
+
+- With custom range length:
+
+.. code-block:: ruby
+
+    RFauxFactory.gen_strings (3..30)
+    => {:alpha=>"humyNICJnf",
+        :alphanumeric=>"hWraGEsBPrELdKI0x0CVpRMak",
+        :cjk=>"烩稟醎渍葼釃枆鄴锐窫角菧妻慗饏镂鮺镬嬦",
+        :cyrillic=>"хђѫӬӷӮюЕѸ",
+        :html=>"<blink>yweAKvPxpTQAzRWCDAmxiyJ</blink>",
+        :latin1=>"ÁóÁ",
+        :numeric=>"626134543753572648033525",
+        :utf8=>"ⱴ嫆𡋹𡗸",
+        :punctuation=>"&@;??}:|\\@\"`[.+\\+|"}
+
+- With excluding some string types:
+
+.. code-block:: ruby
+
+    RFauxFactory.gen_strings exclude: [:html, :punctuation]
+    => {:alpha=>"IBlbvJkYQP",
+        :alphanumeric=>"3KZHRSgbcB",
+        :cjk=>"儫魹咳崙訔船鲓撊郸猡",
+        :cyrillic=>"ӡҁӇѯӇӫэЗыѳ",
+        :latin1=>"ìÜóÌáÓÛéÀâ",
+        :numeric=>"8140474314",
+        :utf8=>"𫐖𦷘𣒣瑩竰誎請𠼎粢裤"}
+
+
+- We can also combine length and exclude options:
+
+.. code-block:: ruby
+
+    RFauxFactory.gen_strings (3..30), exclude: [:html, :punctuation]
+    => {:alpha=>"aLc",
+        :alphanumeric=>"wbfFxoQrL4TOpd8r5",
+        :cjk=>"灢汍袌姩饇狶肌胃穨煍灔舨纡訴鷂彜窟趫",
+        :cyrillic=>"ҥӤѪѦҫОПӿ",
+        :latin1=>"ÌÙÕðñúÚõáÌÉ",
+        :numeric=>"01526437887562321",
+        :utf8=>"柚ᖹ𪮅捰Ʋ"}
 
 Generate bool values:
 +++++++++++++++++++++

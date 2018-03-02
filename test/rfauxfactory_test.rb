@@ -163,13 +163,12 @@ class RFauxFactoryTest < Minitest::Test
     end
   end
 
-  # use 'gen_strings' to generate supported strings with min max length.
+  # use 'gen_strings' to generate supported strings with length as an Integer range.
   def test_gen_strings_with_min_max_length
-    min_length = 10
-    max_length = 100
-    RFauxFactory.gen_strings(min_length: min_length, max_length: max_length).each do |str_type, value|
-      min_length = 10
-      max_length = 100
+    length = (10..100)
+    RFauxFactory.gen_strings(length).each do |str_type, value|
+      min_length = length.min
+      max_length = length.max
       if str_type == :html
         # html is an exception as tags added
         min_length += HTML_TAG_MIN_LENGTH
@@ -179,30 +178,58 @@ class RFauxFactoryTest < Minitest::Test
     end
   end
 
-  def test_gen_strings_bad_min_length
-    ['', ' ', 'a'].each do |min_length|
+  # Cannot generate strings with length not integer
+  def test_gen_strings_length_type
+    ['', ' ', 'a'].each do |length|
       assert_raises TypeError do
-        RFauxFactory.gen_strings(min_length: min_length)
+        RFauxFactory.gen_strings(length)
       end
     end
   end
 
-  def test_gen_strings_bad_max_length
-    ['', ' ', 'a', nil].each do |max_length|
-      assert_raises TypeError do
-        RFauxFactory.gen_strings(max_length: max_length)
-      end
-    end
-  end
-
-  def test_gen_strings_min_length_greater_than_max
+  # Cannot generate strings with negative length of characters.
+  def test_gen_strings_negative_length
     assert_raises ArgumentError do
-      RFauxFactory.gen_strings(min_length: 30, max_length: 10)
+      RFauxFactory.gen_strings(-1)
     end
   end
 
+  # Cannot generate strings with zero length of characters.
+  def test_gen_strings_zero_length
+    assert_raises ArgumentError do
+      RFauxFactory.gen_strings(0)
+    end
+  end
+
+  # Should not be able to generate strings with a bad length range
+  def test_gen_strings_bad_length_range
+    ['', ' ', 'a'].each do |name|
+      assert_raises ArgumentError do
+        RFauxFactory.gen_strings(name..name)
+      end
+    end
+    assert_raises ArgumentError do
+      RFauxFactory.gen_strings(30..3)
+    end
+    assert_raises ArgumentError do
+      RFauxFactory.gen_strings(-1..10)
+    end
+    assert_raises ArgumentError do
+      RFauxFactory.gen_strings(-10..-1)
+    end
+    assert_raises ArgumentError do
+      RFauxFactory.gen_strings(0..10)
+    end
+  end
+
+  # Should be able to generate strings with excluding all types without error
+  def test_gen_strings_exclude_all
+    assert RFauxFactory.gen_strings(exclude: STRING_TYPES).empty?
+  end
+
+  # Generate strings with bad exclude type
   def test_gen_strings_bad_exclude_type
-    assert_raises ArgumentError do
+    assert_raises TypeError do
       RFauxFactory.gen_strings(exclude: 'string as exclude')
     end
   end

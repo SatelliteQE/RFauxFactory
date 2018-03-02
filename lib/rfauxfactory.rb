@@ -32,9 +32,20 @@ module RFauxFactory
       end.join
     end
 
-    def positive_int!(length)
-      raise TypeError, 'length is not of type Integer' unless length.is_a? Integer
-      raise ArgumentError, 'length must be a positive integer' if length <= 0
+    def positive_int!(length, name: 'length')
+      raise TypeError, "#{name} is not of type Integer" unless length.is_a?(Integer)
+      raise ArgumentError, "#{name} must be a positive integer" unless length > 0
+    end
+
+    def positive_int_or_range!(length)
+      raise TypeError, "length must be Integer or Range" unless length.is_a?(Integer) || length.is_a?(Range)
+      if length.is_a?(Integer)
+        positive_int! length
+      else
+        raise ArgumentError, "Bad length range" if length.size.nil? || length.size.zero?
+        positive_int! length.first, name: 'length.first'
+        positive_int! length.last, name: 'length.last'
+      end
     end
 
     public
@@ -100,13 +111,12 @@ module RFauxFactory
     end
 
     # Generates a list of different input strings.
-    def gen_strings(length = nil, exclude: [], min_length: 3, max_length: 30)
-      raise ArgumentError, "exclude must be an Array" unless exclude.is_a?(Array)
-      positive_int! min_length
-      positive_int! max_length
-      raise ArgumentError, "max_length must be greater than min_length" unless max_length > min_length
-      RFauxFactory::STRING_TYPES.keys.reject { |str_type| exclude.include?(str_type) }.map do |str_type|
-        str_length = length.nil? ? rand((min_length..max_length)) : length
+    def gen_strings(length = 10, exclude: [])
+      positive_int_or_range! length
+      raise TypeError, "exclude must be an Array" unless exclude.is_a?(Array)
+      str_types = RFauxFactory::STRING_TYPES.keys.reject { |str_type| exclude.include?(str_type) }
+      str_types.map do |str_type|
+        str_length = length.is_a?(Range) ? rand(length) : length
         [str_type, gen_string(str_type, str_length)]
       end.to_h
     end
