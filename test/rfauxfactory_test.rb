@@ -1,5 +1,7 @@
-require "test_helper"
-require "set"
+# frozen_string_literal: true
+
+require 'test_helper'
+require 'set'
 
 class RFauxFactoryTest < Minitest::Test
   GENERATORS = %i[
