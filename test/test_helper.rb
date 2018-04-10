@@ -1,4 +1,6 @@
-if RUBY_VERSION > "2.5"
+# frozen_string_literal: true
+
+if RUBY_VERSION > '2.5'
   require 'simplecov'
   require 'coveralls'
 
@@ -11,7 +13,7 @@ if RUBY_VERSION > "2.5"
   end
 end
 
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
-require "rfauxfactory"
-require "minitest/autorun"
+require 'rfauxfactory'
+require 'minitest/autorun'

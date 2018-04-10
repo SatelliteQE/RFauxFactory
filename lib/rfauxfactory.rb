@@ -1,5 +1,7 @@
-require "rfauxfactory/version"
-require "rfauxfactory/constants"
+# frozen_string_literal: true
+
+require 'rfauxfactory/version'
+require 'rfauxfactory/constants'
 
 # The python FauxFactory port
 module RFauxFactory
@@ -38,11 +40,11 @@ module RFauxFactory
     end
 
     def positive_int_or_range!(length)
-      raise TypeError, "length must be Integer or Range" unless length.is_a?(Integer) || length.is_a?(Range)
+      raise TypeError, 'length must be Integer or Range' unless length.is_a?(Integer) || length.is_a?(Range)
       if length.is_a?(Integer)
         positive_int! length
       else
-        raise ArgumentError, "Bad length range" if length.size.nil? || length.size.zero?
+        raise ArgumentError, 'Bad length range' if length.size.nil? || length.size.zero?
         positive_int! length.first, name: 'length.first'
         positive_int! length.last, name: 'length.last'
       end
@@ -113,7 +115,7 @@ module RFauxFactory
     # Generates a list of different input strings.
     def gen_strings(length = 10, exclude: [])
       positive_int_or_range! length
-      raise TypeError, "exclude must be an Array" unless exclude.is_a?(Array)
+      raise TypeError, 'exclude must be an Array' unless exclude.is_a?(Array)
       str_types = RFauxFactory::STRING_TYPES.keys.reject { |str_type| exclude.include?(str_type) }
       str_types.map do |str_type|
         str_length = length.is_a?(Range) ? rand(length) : length

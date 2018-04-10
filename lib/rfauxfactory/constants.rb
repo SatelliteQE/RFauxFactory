@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module RFauxFactory
   MAX_INT = 2**(1.size * 8 - 2) - 1
   MIN_INT = -MAX_INT - 1
-  ASCII_LOWERCASE = 'abcdefghijklmnopqrstuvwxyz'.freeze
-  ASCII_UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.freeze
-  PUNCTUATION = %q(!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~).freeze
+  ASCII_LOWERCASE = 'abcdefghijklmnopqrstuvwxyz'
+  ASCII_UPPERCASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  PUNCTUATION = %q(!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~)
   ASCII_LETTERS = ASCII_LOWERCASE + ASCII_UPPERCASE
-  DIGITS = '0123456789'.freeze
+  DIGITS = '0123456789'
   ALPHANUMERIC = ASCII_LETTERS + DIGITS
   HTML_TAGS = %w[
     a abbr acronym address applet area b
