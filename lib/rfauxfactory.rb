@@ -127,5 +127,42 @@ module RFauxFactory
     def gen_boolean
       [true, false].sample
     end
+
+    # Generates a random IP address.
+    def gen_ipaddr(protocol: :ip4, prefix: [])
+      raise ArgumentError, "#{protocol} is not valid protocol" unless IP_BLOCKS.key?(protocol)
+      sections = IP_BLOCKS[protocol]
+      prefix.map(&:to_s).compact
+      sections -= prefix.length
+      raise ArgumentError, "Prefix #{prefix} is too long for this configuration" if sections <= 0
+      random_fields = if protocol == :ipv6
+                        Array.new(sections) { rand(0..2**16 - 1).to_s(16) }
+                      else
+                        Array.new(sections) { rand(0..255) }
+                      end
+      ipaddr = (prefix + random_fields).join(IP_SEPARATOR[protocol])
+      ipaddr += '.0' if protocol == :ip3
+      ipaddr
+    end
+
+    # Generates a random MAC address.
+    def gen_mac(delimiter: ':', multicast: nil, locally: nil)
+      raise ArgumentError, "#{delimiter} is not valid delimiter" unless %w[: -].include?(delimiter)
+      multicast = gen_boolean if multicast.nil?
+      locally = gen_boolean if locally.nil?
+      first_octet = rand(0..255)
+      multicast ? first_octet |= 0b00000001 : first_octet &= 0b11111110
+      locally ? first_octet |= 0b00000010 : first_octet &= 0b11111101
+      octets = [first_octet]
+      octets += (Array.new(5) { rand(0..255) })
+      octets.map { |octet| format('%02x', octet) }.join(delimiter)
+    end
+
+    # Generates a random netmask.
+    def gen_netmask(min_cidr: 1, max_cidr: 31)
+      raise ArgumentError, "min_cidr must be 0 or greater, but is #{min_cidr}" if min_cidr < 0
+      raise ArgumentError, "max_cidr must be 0 or greater, but is #{max_cidr}" if max_cidr >= VALID_NETMASKS.length
+      VALID_NETMASKS[rand(min_cidr..max_cidr)]
+    end
   end
 end
